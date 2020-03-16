@@ -23,45 +23,81 @@ async function emailEmpPostApp(approverEmail:string,employeeFirstName:string,emp
   return res;    
 }
 
-async function emailLeavePostEmp(empEmail:string,empFirstName:string,leaveDay:string,leaveType:string,description:string,startDate:string,endDate:string,daysCount:number,){
+async function emailLeavePostEmp(empEmail:string,empFirstName:string,leaveDayBool:boolean,leaveType:string,description:string,startDate:string,endDate:string,daysCount:number){
+  let leaveDay;
+  if(leaveDayBool){leaveDay="Half Day";} else {leaveDay="Full Day";}
+
+  let d1 = new Date(startDate);
+  let myStartDate = d1.getDate() + "/" + (d1.getMonth() + 1) + "/" + d1.getFullYear()
+  let d2 = new Date(endDate);
+  let myEndDate = d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear()
+
   console.log('from emailLeavePostEmp');
+
   const myMailOptions = {
     to:empEmail,
     subject: "" + leaveType.charAt(0).toUpperCase() + leaveType.slice(1) + " leave successfully applied by " + empFirstName, // Subject line,
-    html: "<p><b>You</b>" + " applied for " + leaveDay + " " + "<b>" + leaveType + "</b>" + " leave from " + "<b>" + startDate + "</b>" + " to " + "<b>" + endDate + "</b>" + "<p><b>Reason:</b>" + description + "<p><b>No of days</b> : " + daysCount // html body
+    html: "<p><b>You</b>" + " applied for " + leaveDay + " " + "<b>" + leaveType + "</b>" + " leave from " + "<b>" + myStartDate + "</b>" + " to " + "<b>" + myEndDate + "</b>" + "<p><b>Reason:</b>" + description + "<p><b>No of days</b> : " + daysCount // html body
   };
+
   const res= await emailservice(myMailOptions);
   return res;
 }
 
-async function emailLeavePostApp(approverEmail:string,empFirstName:string,leaveDay:string,leaveType:string,description:string,startDate:string,endDate:string,daysCount:number){
-  console.log('from emailLeavePostApp'); 
+async function emailLeavePostApp(approverEmail:string,empFirstName:string,leaveDayBool:boolean,leaveType:string,description:string,startDate:string,endDate:string,daysCount:number){
+  let leaveDay;
+  if(leaveDayBool){leaveDay="Half Day"} else {leaveDay="Full Day"}
+
+  let d1 = new Date(startDate);
+  let myStartDate = d1.getDate() + "/" + (d1.getMonth() + 1) + "/" + d1.getFullYear()
+  let d2 = new Date(endDate);
+  let myEndDate = d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear()
+
+  console.log('from emailLeavePostApp');
+
   const myMailOptions = {
     to:approverEmail,
     subject: "" + leaveType.charAt(0).toUpperCase() + leaveType.slice(1) + " leave applied by " + empFirstName, // Subject line
-    html: "<p><b>" + empFirstName + "</b>" + " applied for " + leaveDay + " " + "<b>" + leaveType + "</b>" + " leave from " + "<b>" + startDate + "</b>" + " to " + "<b>" + endDate + "</b>" + "<p><b>Reason:</b>" + description + "<p><b>No of days</b> : " + daysCount // html body
-    };
-    const res= await emailservice(myMailOptions);
+    html: "<p><b>" + empFirstName + "</b>" + " applied for " + leaveDay + " " + "<b>" + leaveType + "</b>" + " leave from " + "<b>" + myStartDate + "</b>" + " to " + "<b>" + myEndDate + "</b>" + "<p><b>Reason:</b>" + description + "<p><b>No of days</b> : " + daysCount // html body
+  };
+
+  const res= await emailservice(myMailOptions);
   return res; 
 }
 
-async function emailLeavePutAcc(empEmail:string,empFirstName:string,leaveDay:string,leaveType:string,startDate:string,endDate:string){
+async function emailLeavePatchAcc(empEmail:string,empFirstName:string,leaveDayBool:boolean,leaveType:string,startDate:string,endDate:string){
+  let leaveDay;
+  if(leaveDayBool){leaveDay="Half Day"} else {leaveDay="Full Day"}
+
+  let d1 = new Date(startDate);
+  let myStartDate = d1.getDate() + "/" + (d1.getMonth() + 1) + "/" + d1.getFullYear()
+  let d2 = new Date(endDate);
+  let myEndDate = d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear()
+  
   console.log('from emailLeavePutAcc');
   const myMailOptions = {
     to:empEmail,
     subject: "[APPROVED]-" + leaveType.charAt(0).toUpperCase() + leaveType.slice(1) + " leave applied by " + empFirstName, // Subject line
-    html: "<p>The " + leaveDay + " " + leaveType + "</b>" + " leave that you applied from " + "<b>" + startDate + "</b>" + " to " + "<b>" + endDate + "</b> has been approved." // html body
+    html: "<p>The " + leaveDay + " " + leaveType + "</b>" + " leave that you applied from " + "<b>" + myStartDate + "</b>" + " to " + "<b>" + myEndDate + "</b> has been approved." // html body
   };
   const res= await emailservice(myMailOptions);
   return res;
 }
 
-async function emailLeavePutRej(empEmail:string,empFirstName:string,leaveDay:string,leaveType:string,startDate:string,endDate:string){
+async function emailLeavePatchRej(empEmail:string,empFirstName:string,leaveDayBool:boolean,leaveType:string,startDate:string,endDate:string){
+  let leaveDay;
+  if(leaveDayBool){leaveDay="Half Day"} else {leaveDay="Full Day"}
+
+  let d1 = new Date(startDate);
+  let myStartDate = d1.getDate() + "/" + (d1.getMonth() + 1) + "/" + d1.getFullYear()
+  let d2 = new Date(endDate);
+  let myEndDate = d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear()
+
   console.log('from emailLeavePutRej');
   const myMailOptions = {
     to:empEmail,
     subject: "[REJECTED]-" + leaveType.charAt(0).toUpperCase() + leaveType.slice(1) + " leave applied by " + empFirstName, // Subject line
-    html: "<p>The " + leaveDay + " " + leaveType + "</b>" + " leave that you applied from " + "<b>" + startDate + "</b>" + " to " + "<b>" + endDate + "</b> has been rejected." // html body
+    html: "<p>The " + leaveDay + " " + leaveType + "</b>" + " leave that you applied from " + "<b>" + myStartDate + "</b>" + " to " + "<b>" + myEndDate + "</b> has been rejected." // html body
   };
   const res= await emailservice(myMailOptions);
   return res;
@@ -99,4 +135,4 @@ async function emailservice(mailOptions:any) {
   return SES.sendEmail(sesParams).promise();
 }
 
-export { emailEmpPostEmp , emailEmpPostApp , emailLeavePostEmp , emailLeavePostApp , emailLeavePutAcc , emailLeavePutRej};
+export { emailEmpPostEmp , emailEmpPostApp , emailLeavePostEmp , emailLeavePostApp , emailLeavePatchAcc , emailLeavePatchRej};

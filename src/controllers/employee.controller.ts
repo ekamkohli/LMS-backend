@@ -65,9 +65,13 @@ export class EmployeeController {
 
       //Code for Email sending
       const responseEmp = await emailEmpPostEmp(employeeRequest.email,employeeRequest.firstName,employeeRequest.password);
-      const responseApp = await emailEmpPostApp(employeeRequest.approver,employeeRequest.firstName,employeeRequest.email);
       console.log('Employee email res:', responseEmp);
-      console.log('Approver email res:', responseApp);
+      if(employeeRequest.role !== "admin") {
+        let approver = await this.employeeRepository.findById(employeeRequest.approver)
+        if(!approver) throw new Error('Entered approver doesn\'t exist')
+        const responseApp = await emailEmpPostApp(approver.email,employeeRequest.firstName,employeeRequest.email);
+        console.log('Approver email res:', responseApp);
+      }    
 
       return result;
     } catch (err) {
