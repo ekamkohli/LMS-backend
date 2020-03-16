@@ -118,10 +118,10 @@ export class LeaveController {
       const savedLeave = await this.leaveRepository.create(leave);
       
       //Code for Email sending
-      const responseEmp = await emailLeavePostEmp(employee.email,leave.firstName,leave.halfDay,leave.leaveType,leave.description,leave.startDate,leave.endDate,leave.daysCount);
-      const responseApp = await emailLeavePostApp(approver.email,leave.firstName,leave.halfDay,leave.leaveType,leave.description,leave.startDate,leave.endDate,leave.daysCount);
-      console.log('Employee email res:', responseEmp);
-      console.log('Approver email res:', responseApp);
+      // const responseEmp = await emailLeavePostEmp(employee.email,leave.firstName,leave.halfDay,leave.leaveType,leave.description,leave.startDate,leave.endDate,leave.daysCount);
+      // const responseApp = await emailLeavePostApp(approver.email,leave.firstName,leave.halfDay,leave.leaveType,leave.description,leave.startDate,leave.endDate,leave.daysCount);
+      // console.log('Employee email res:', responseEmp);
+      // console.log('Approver email res:', responseApp);
 
       return savedLeave;
 
@@ -302,13 +302,13 @@ export class LeaveController {
       const updatedLeave = await this.leaveRepository.updateById(id, leave);
       
       //Code for emailing
-      if(leave.status === "approved") {
-        const responseApp = await emailLeavePatchAcc(employee.email,employee.firstName,leave.halfDay,leave.leaveType,leave.startDate,leave.endDate);
-        console.log('Approved email res:', responseApp); 
-      } else if(leave.status === "rejected") {
-        const responseRej = await emailLeavePatchRej(employee.email,employee.firstName,leave.halfDay,leave.leaveType,leave.startDate,leave.endDate);
-        console.log('Rejected email res:', responseRej);
-      }
+      // if(leave.status === "approved") {
+      //   const responseApp = await emailLeavePatchAcc(employee.email,employee.firstName,leave.halfDay,leave.leaveType,leave.startDate,leave.endDate);
+      //   console.log('Approved email res:', responseApp); 
+      // } else if(leave.status === "rejected") {
+      //   const responseRej = await emailLeavePatchRej(employee.email,employee.firstName,leave.halfDay,leave.leaveType,leave.startDate,leave.endDate);
+      //   console.log('Rejected email res:', responseRej);
+      // }
       
       return leave
     } catch(err) {

@@ -64,17 +64,21 @@ export class EmployeeController {
       const result = await this.employeeRepository.create(employeeRequest);
 
       //Code for Email sending
-      const responseEmp = await emailEmpPostEmp(employeeRequest.email,employeeRequest.firstName,employeeRequest.password);
-      console.log('Employee email res:', responseEmp);
+      //const responseEmp = await emailEmpPostEmp(employeeRequest.email,employeeRequest.firstName,employeeRequest.password);
+      //console.log('Employee email res:', responseEmp);
       if(employeeRequest.role !== "admin") {
         let approver = await this.employeeRepository.findById(employeeRequest.approver)
         if(!approver) throw new Error('Entered approver doesn\'t exist')
-        const responseApp = await emailEmpPostApp(approver.email,employeeRequest.firstName,employeeRequest.email);
-        console.log('Approver email res:', responseApp);
-      }    
+        //const responseApp = await emailEmpPostApp(approver.email,employeeRequest.firstName,employeeRequest.email);
+        //console.log('Approver email res:', responseApp);
+      } else {
+        result.approver = result.id.toString();
+        await this.employeeRepository.updateById(result.id, result);
+      }
 
       return result;
     } catch (err) {
+      console.log(err.stack)
       console.log(err.toString());
       throw { status: 400, message: err.toString() }
     }

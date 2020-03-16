@@ -80,7 +80,6 @@ export class Employee extends Entity {
   @property({
     type: 'string',
     default: "",
-    required: true
   })
   approver: string;
 
