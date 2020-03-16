@@ -11,7 +11,7 @@ export class Employee extends Entity {
       applied: Joi.number().required(),
       availed: Joi.number().required(),
       available: Joi.number().required()
-    }).required();
+    })
 
     const schema = {
       firstName: Joi.string().min(3).max(50).required(),
@@ -25,7 +25,7 @@ export class Employee extends Entity {
       role: Joi.string().min(5).max(255).required(),
       approver: Joi.string().required().allow(""),
       password: Joi.string().min(5).max(1024).required(),
-      leaves: Joi.array().items(objectSchema).min(1).unique().required()
+      leaves: Joi.array().items(objectSchema)
     }
     return Joi.validate(employeeRequest, schema);
   }
