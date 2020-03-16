@@ -18,13 +18,15 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {LeaveType} from '../models';
-import {LeaveTypeRepository} from '../repositories';
+import {LeaveTypeRepository, EmployeeRepository} from '../repositories';
 
 export class LeaveTypeController {
   constructor(
     @repository(LeaveTypeRepository)
     public leaveTypeRepository: LeaveTypeRepository,
-  ) {}
+    @repository(EmployeeRepository)
+    public employeeRepository: EmployeeRepository,
+    ) {}
 
   @post('/leave-types', {
     responses: {
@@ -53,7 +55,13 @@ export class LeaveTypeController {
       const leaveType = await this.leaveTypeRepository.findOne({ where: { type: leaveTypeRequest.type } } )
       if(leaveType)
         throw new Error("Leave Type Already exists")
-      return this.leaveTypeRepository.create(leaveTypeRequest);
+      const createdLeaveType = await this.leaveTypeRepository.create(leaveTypeRequest);
+      const employees = await this.employeeRepository.find()
+      employees.forEach(async (employee) => {
+        employee.leaves.push(createdLeaveType)
+        await this.employeeRepository.updateById(employee.id, employee)
+      });
+      return createdLeaveType
     } catch (err) {
       console.log(err.stack)
       console.log(err.toString());
